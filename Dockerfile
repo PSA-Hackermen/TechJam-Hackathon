@@ -6,8 +6,15 @@ COPY ai-yapper-agent ai-yapper-agent
 COPY aiya-web-app aiya-web-app
 
 # build the bundle
-RUN cd ai-yapper-agent && npm install && npm run build && cd ..
+RUN cd ai-yapper-agent && \
+    npm install && \
+    npm run build && \
+    cd .. && \
+    cd aiya-web-app && \
+    npm install && \
+    cd ..
+    
 ENTRYPOINT ["sh", "-c"]
-CMD ["cd aiya-web-app && npm install && npm run dev"]
+CMD ["cd aiya-web-app && npm run dev"]
 
 EXPOSE 3000

@@ -23,3 +23,6 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          envFrom:
+          - secretRef:
+              name: aws-secret
