@@ -8,9 +8,8 @@ import reactLynxLogo from './assets/react-logo.png'
 export function App(props: {
   onRender?: () => void
 }) {
-  const [alterLogo, setAlterLogo] = useState(false)
   const [prompt, setPrompt] = useState('');
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<object | string | null>(null);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const setNativeProps = (itemId: string, props: Record<string, unknown>) => {
@@ -87,21 +86,37 @@ export function App(props: {
       console.warn('Lynx global object not available');
     }
 
-    fetch('https://api.genderize.io?name=peter')
-      .then(res => res.json())
-      .then(json => {
-        setData(json);
-        console.log(json);
-      })
-      .catch(err => console.error(err))
+    // fetch('https://api.genderize.io?name=peter')
+    //   .then(res => res.json())
+    //   .then(json => {
+    //     setData(json);
+    //     console.log(json);
+    //   })
+    //   .catch(err => {
+    //     setData(err.toString());
+    //     console.error(err);
+    //   })
 
   }, [])
   props.onRender?.()
 
-  const onTap = useCallback(() => {
-    'background only'
-    setAlterLogo(prevAlterLogo => !prevAlterLogo)
-  }, [])
+  const sendPrompt = (prompt: string) => {
+    console.log("Sending prompt:", prompt);
+
+    const url = `https://tyouwei.app.n8n.cloud/webhook/066bdbec-ef6a-48a9-b76c-5cc63bfc88f7?prompt=${encodeURIComponent(prompt)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        setData(json);
+        console.log("Response data:", json);
+      })
+      .catch(err => {
+        setData("Error encountered: " + err.toString());
+        console.error("Error fetching data:", err);
+      });
+    
+  }
 
   return (
     <view>
@@ -152,6 +167,7 @@ export function App(props: {
               className='SendButton'
               bindtap={() => {
                 // You can add additional logic here if needed
+                sendPrompt(prompt);
                 setPrompt(''); // This will trigger any side effects
               }}
             >
