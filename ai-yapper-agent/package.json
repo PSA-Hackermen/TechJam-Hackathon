@@ -11,7 +11,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@lynx-js/react": "^0.112.4"
+    "@google/genai": "^1.16.0",
+    "@lynx-js/react": "^0.112.4",
+    "base-64": "^1.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.3",
@@ -22,6 +24,7 @@
     "@lynx-js/types": "3.3.0",
     "@rsbuild/plugin-type-check": "1.2.4",
     "@testing-library/jest-dom": "^6.8.0",
+    "@types/base-64": "^1.0.2",
     "@types/react": "^18.3.23",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",

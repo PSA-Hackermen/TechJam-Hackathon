@@ -3,14 +3,12 @@
   --color-text: #fff;
 }
 
-.Background {
+/* .Background {
   position: fixed;
-  background: radial-gradient(
-    71.43% 62.3% at 46.43% 36.43%,
-    rgba(18, 229, 229, 0) 15%,
-    rgba(239, 155, 255, 0.3) 56.35%,
-    #ff6448 100%
-  );
+  background: radial-gradient(71.43% 62.3% at 46.43% 36.43%,
+      rgba(18, 229, 229, 0) 15%,
+      rgba(239, 155, 255, 0.3) 56.35%,
+      #ff6448 100%);
   box-shadow: 0px 12.93px 28.74px 0px #ffd28db2 inset;
   border-radius: 50%;
   width: 200vw;
@@ -18,7 +16,7 @@
   top: -60vw;
   left: -14.27vw;
   transform: rotate(15.25deg);
-}
+} */
 
 .App {
   position: relative;
@@ -26,30 +24,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 text {
   color: var(--color-text);
 }
 
-.Banner {
+/* .Banner {
   flex: 5;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 100;
-}
-
+} */
+/* 
 .Logo {
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
-}
+} */
 
-.Logo--react {
+/* .Logo--react {
   width: 100px;
   height: 100px;
   animation: Logo--spin infinite 20s linear;
@@ -59,12 +58,13 @@ text {
   width: 100px;
   height: 100px;
   animation: Logo--shake infinite 0.5s ease;
-}
+} */
 
-@keyframes Logo--spin {
+/* @keyframes Logo--spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -74,22 +74,38 @@ text {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(0.9);
   }
+
   100% {
     transform: scale(1);
   }
-}
+} */
 
 .Content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1;
+  width: 100%;
 }
 
-.Arrow {
+.TextareaPanel {
+  width: 100%;
+  /* max-width: 500px; */
+  padding: 10px;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+/* .Arrow {
   width: 24px;
   height: 24px;
 }
@@ -97,15 +113,13 @@ text {
 .Title {
   font-size: 36px;
   font-weight: 700;
-}
+} */
 
-.Subtitle {
-  font-style: italic;
-  font-size: 22px;
+ .Subtitle {
+  font-size: 30px;
   font-weight: 600;
-  margin-bottom: 8px;
 }
-
+/*
 .Description {
   font-size: 20px;
   color: rgba(255, 255, 255, 0.85);
@@ -116,4 +130,79 @@ text {
   font-size: 12px;
   margin: 5px;
   color: rgba(255, 255, 255, 0.65);
+} */
+
+input {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 16px;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 1);
+  height: 40px;
+}
+
+input::placeholder {
+  color: rgb(88, 88, 88);
+  opacity: 1;
+}
+
+textarea {
+  border: 1px solid #000;
+  border-radius: 20px;
+  padding: 10px 12px;
+  font-size: 18px;
+  color: rgb(255, 255, 255);
+  width: 100%;
+  min-height: 45px;
+  max-height: 100px;
+  box-sizing: border-box;
+  background: rgb(37, 37, 37);
+}
+
+textarea::placeholder {
+  color: rgb(108, 108, 108);
+  opacity: 1;
+}
+
+.InputContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+.InputContainer textarea {
+  flex: 1;
+}
+
+.SendButton {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.SendButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.SendButton:active {
+  transform: scale(0.95);
+}
+
+.SendButton text {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
 }
