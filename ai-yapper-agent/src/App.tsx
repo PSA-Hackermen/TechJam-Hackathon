@@ -5,6 +5,34 @@ import arrow from './assets/arrow.png'
 import lynxLogo from './assets/lynx-logo.png'
 import reactLynxLogo from './assets/react-logo.png'
 
+// Global error prevention for lynx object
+if (typeof window !== 'undefined') {
+  // Create a safe proxy for lynx if it doesn't exist or is incomplete
+  if (typeof (window as any).lynx === 'undefined') {
+    (window as any).lynx = {};
+  }
+  
+  // Ensure lynx object has safe fallbacks for all methods
+  const lynxSafety = (window as any).lynx;
+  if (!lynxSafety.switchKeyBoardDetect) {
+    lynxSafety.switchKeyBoardDetect = (enabled: boolean) => {
+      console.log('switchKeyBoardDetect called with:', enabled, '(fallback implementation)');
+    };
+  }
+  
+  if (!lynxSafety.createSelectorQuery) {
+    lynxSafety.createSelectorQuery = () => ({
+      select: () => ({
+        setNativeProps: () => ({
+          exec: () => {
+            console.log('createSelectorQuery called (fallback implementation)');
+          }
+        })
+      })
+    });
+  }
+}
+
 export function App(props: {
   onRender?: () => void
 }) {
@@ -108,6 +136,8 @@ export function App(props: {
     };
   }, [])
   props.onRender?.()
+
+  
 
   const sendPrompt = (prompt: string) => {
     console.log("Sending prompt:", prompt);
