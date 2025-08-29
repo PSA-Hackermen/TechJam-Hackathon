@@ -5,6 +5,34 @@ import arrow from './assets/arrow.png'
 import lynxLogo from './assets/lynx-logo.png'
 import reactLynxLogo from './assets/react-logo.png'
 
+// Global error prevention for lynx object
+if (typeof window !== 'undefined') {
+  // Create a safe proxy for lynx if it doesn't exist or is incomplete
+  if (typeof (window as any).lynx === 'undefined') {
+    (window as any).lynx = {};
+  }
+  
+  // Ensure lynx object has safe fallbacks for all methods
+  const lynxSafety = (window as any).lynx;
+  if (!lynxSafety.switchKeyBoardDetect) {
+    lynxSafety.switchKeyBoardDetect = (enabled: boolean) => {
+      console.log('switchKeyBoardDetect called with:', enabled, '(fallback implementation)');
+    };
+  }
+  
+  if (!lynxSafety.createSelectorQuery) {
+    lynxSafety.createSelectorQuery = () => ({
+      select: () => ({
+        setNativeProps: () => ({
+          exec: () => {
+            console.log('createSelectorQuery called (fallback implementation)');
+          }
+        })
+      })
+    });
+  }
+}
+
 export function App(props: {
   onRender?: () => void
 }) {
@@ -69,22 +97,43 @@ export function App(props: {
   useEffect(() => {
     console.info('Hello, ReactLynx')
 
+    // Add global error handler for debugging
+    const handleGlobalError = (event: ErrorEvent) => {
+      console.error('Global error caught:', event.error);
+      if (event.error?.message?.includes('switchKeyBoardDetect')) {
+        console.error('switchKeyBoardDetect error details:', {
+          lynxAvailable: typeof lynx !== 'undefined',
+          lynxValue: typeof lynx !== 'undefined' ? lynx : 'undefined',
+          error: event.error
+        });
+      }
+    };
+
+    window.addEventListener('error', handleGlobalError);
+
     // Check and initialize lynx global object
-    if (typeof lynx !== 'undefined') {
+    if (typeof lynx !== 'undefined' && lynx !== null) {
       console.log('Lynx global object is available');
       // Initialize keyboard detection if available
       const lynxWithKeyboard = lynx as any;
-      if (lynxWithKeyboard.switchKeyBoardDetect) {
+      if (lynxWithKeyboard && typeof lynxWithKeyboard.switchKeyBoardDetect === 'function') {
         try {
           lynxWithKeyboard.switchKeyBoardDetect(true);
           console.log('Keyboard detection enabled');
         } catch (error) {
           console.error('Error enabling keyboard detection:', error);
         }
+      } else {
+        console.log('switchKeyBoardDetect not available on lynx object');
       }
     } else {
       console.warn('Lynx global object not available');
     }
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('error', handleGlobalError);
+    };
 
     // fetch('https://api.genderize.io?name=peter')
     //   .then(res => res.json())
