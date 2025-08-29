@@ -18,3 +18,19 @@ declare module '@lynx-js/types' {
     };
   }
 }
+
+// Declare global lynx object
+declare global {
+  interface LynxSelectorQuery {
+    select(selector: string): LynxSelectorQuery;
+    setNativeProps(props: Record<string, unknown>): LynxSelectorQuery;
+    exec(): void;
+  }
+
+  interface LynxGlobal {
+    createSelectorQuery(): LynxSelectorQuery;
+    switchKeyBoardDetect?: (enabled: boolean) => void;
+  }
+
+  var lynx: LynxGlobal | undefined;
+}

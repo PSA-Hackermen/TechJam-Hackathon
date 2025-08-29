@@ -14,48 +14,78 @@ export function App(props: {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const setNativeProps = (itemId: string, props: Record<string, unknown>) => {
-    lynx
-      .createSelectorQuery()
-      .select(`#${itemId}`)
-      .setNativeProps(props)
-      .exec();
+    // Check if lynx global object is available
+    if (typeof lynx !== 'undefined' && lynx?.createSelectorQuery) {
+      lynx
+        .createSelectorQuery()
+        .select(`#${itemId}`)
+        .setNativeProps(props)
+        .exec();
+    } else {
+      console.warn('Lynx global object not available, skipping setNativeProps for:', itemId);
+    }
   };
 
   const keyboardChanged = (keyboardHeightInPx: number) => {
     const isKeyboardVisible = keyboardHeightInPx > 0;
     setKeyboardVisible(isKeyboardVisible);
 
-    if (keyboardHeightInPx === 0) {
-      setNativeProps("textareaPanel", {
-        transform: `translateY(${0}px)`,
-        transition: "transform 0.3s ease",
-      });
-    } else {
-      setNativeProps("textareaPanel", {
-        transform: `translateY(${-keyboardHeightInPx}px)`,
-        transition: "transform 0.3s ease",
-      });
-      // Refocus textarea after a short delay to allow transform to complete
-      setTimeout(() => {
-        setNativeProps("userTextarea", {
-          focus: true
+    try {
+      if (keyboardHeightInPx === 0) {
+        setNativeProps("textareaPanel", {
+          transform: `translateY(${0}px)`,
+          transition: "transform 0.3s ease",
         });
-      }, 350); // Slightly longer than transition duration
+      } else {
+        setNativeProps("textareaPanel", {
+          transform: `translateY(${-keyboardHeightInPx}px)`,
+          transition: "transform 0.3s ease",
+        });
+        // Refocus textarea after a short delay to allow transform to complete
+        setTimeout(() => {
+          setNativeProps("userTextarea", {
+            focus: true
+          });
+        }, 350); // Slightly longer than transition duration
+      }
+    } catch (error) {
+      console.error('Error in keyboardChanged:', error);
     }
   };
 
   useLynxGlobalEventListener(
     "keyboardstatuschanged",
     (status: unknown, keyboardHeight: unknown) => {
-      console.log("Keyboard status:", status);
-      console.log("Keyboard height:", keyboardHeight);
-      // @ts-ignore
-      keyboardChanged(status === "on" ? keyboardHeight : 0);
+      try {
+        console.log("Keyboard status:", status);
+        console.log("Keyboard height:", keyboardHeight);
+        // @ts-ignore
+        keyboardChanged(status === "on" ? keyboardHeight : 0);
+      } catch (error) {
+        console.error('Error in keyboard event listener:', error);
+      }
     },
   );
 
   useEffect(() => {
     console.info('Hello, ReactLynx')
+
+    // Check and initialize lynx global object
+    if (typeof lynx !== 'undefined') {
+      console.log('Lynx global object is available');
+      // Initialize keyboard detection if available
+      const lynxWithKeyboard = lynx as any;
+      if (lynxWithKeyboard.switchKeyBoardDetect) {
+        try {
+          lynxWithKeyboard.switchKeyBoardDetect(true);
+          console.log('Keyboard detection enabled');
+        } catch (error) {
+          console.error('Error enabling keyboard detection:', error);
+        }
+      }
+    } else {
+      console.warn('Lynx global object not available');
+    }
 
     fetch('https://api.genderize.io?name=peter')
       .then(res => res.json())
