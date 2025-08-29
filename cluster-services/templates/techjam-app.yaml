@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: techjam
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: lynx
+    server: https://kubernetes.default.svc
+  project: default
+  revisionHistoryLimit: 10
+  source:
+    path: sources/techjam
+    repoURL: https://github.com/PSA-Hackermen/TechJam-Hackathon
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - ../../values/cluster-values.yaml
+        - ../../sources/techjam/values.yaml
+      parameters:
+        - name: namespace
+          value: lynx
+        - name: appBaseName
+          value: techjam
+        - name: serviceFolder
+          value: sources/techjam
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
