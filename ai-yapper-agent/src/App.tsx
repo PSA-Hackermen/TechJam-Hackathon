@@ -5,34 +5,6 @@ import arrow from './assets/arrow.png'
 import lynxLogo from './assets/lynx-logo.png'
 import reactLynxLogo from './assets/react-logo.png'
 
-// Global error prevention for lynx object
-if (typeof window !== 'undefined') {
-  // Create a safe proxy for lynx if it doesn't exist or is incomplete
-  if (typeof (window as any).lynx === 'undefined') {
-    (window as any).lynx = {};
-  }
-  
-  // Ensure lynx object has safe fallbacks for all methods
-  const lynxSafety = (window as any).lynx;
-  if (!lynxSafety.switchKeyBoardDetect) {
-    lynxSafety.switchKeyBoardDetect = (enabled: boolean) => {
-      console.log('switchKeyBoardDetect called with:', enabled, '(fallback implementation)');
-    };
-  }
-  
-  if (!lynxSafety.createSelectorQuery) {
-    lynxSafety.createSelectorQuery = () => ({
-      select: () => ({
-        setNativeProps: () => ({
-          exec: () => {
-            console.log('createSelectorQuery called (fallback implementation)');
-          }
-        })
-      })
-    });
-  }
-}
-
 export function App(props: {
   onRender?: () => void
 }) {
@@ -134,30 +106,25 @@ export function App(props: {
     return () => {
       window.removeEventListener('error', handleGlobalError);
     };
-
-    // fetch('https://api.genderize.io?name=peter')
-    //   .then(res => res.json())
-    //   .then(json => {
-    //     setData(json);
-    //     console.log(json);
-    //   })
-    //   .catch(err => {
-    //     setData(err.toString());
-    //     console.error(err);
-    //   })
-
   }, [])
   props.onRender?.()
 
   const sendPrompt = (prompt: string) => {
     console.log("Sending prompt:", prompt);
 
-    const url = `https://tyouwei.app.n8n.cloud/webhook/066bdbec-ef6a-48a9-b76c-5cc63bfc88f7?prompt=${encodeURIComponent(prompt)}`;
+    const url = `https://wwkzwpjl19.execute-api.us-east-1.amazonaws.com/v1/infer`;
 
-    fetch(url)
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.X_API_KEY as string
+      },
+      body: JSON.stringify({ "prompt": prompt, "sessionId": "session1" })
+    })
       .then(res => res.json())
       .then(json => {
-        setData(json);
+        setData(json['response']);
         console.log("Response data:", json);
       })
       .catch(err => {
