@@ -148,7 +148,7 @@ export function App(props: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.X_API_KEY as string
+        'x-api-key': import.meta.env.PUBLIC_X_API_KEY as string
       },
       body: JSON.stringify({ "prompt": prompt, "sessionId": "session1" })
     })
