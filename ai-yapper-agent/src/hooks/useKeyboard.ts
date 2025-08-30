@@ -49,6 +49,7 @@ export const useKeyboard = () => {
 
   return {
     keyboardVisible,
-    keyboardChanged
+    keyboardChanged,
+    setNativeProps
   };
 };
