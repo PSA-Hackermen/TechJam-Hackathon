@@ -9,7 +9,7 @@ The development tools that we used to build this project are:
 - VSCode
 - Github
 - GitHub Actions
-- Amazon Bedrock (API)
+- Amazon Bedrock
 - ArgoCD
 - Docker
 - Kubernetes
@@ -24,7 +24,7 @@ Libraries used:
 
 The hosted bundle files are available at the URL: [https://lynx.georgetay.com/main.lynx.bundle](https://lynx.georgetay.com/main.lynx.bundle).
 
-If you are using Lynx Go, you can enter in the above URL into the Card URL field to see the app in action.
+Install the "Lynx Go" in your mobile devices, open the app and you can enter in the above URL into the Card URL field to see our app in action without having to setup AWS.
 
 ### Local Installation
 
