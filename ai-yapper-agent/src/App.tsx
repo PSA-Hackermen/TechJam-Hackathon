@@ -15,6 +15,7 @@ export function App(props: {
   const [chatList, setChatList] = useState<string[]>([]);
   const [callingAPI, setCallingAPI] = useState(false);
 
+  const [sessionId, setSessionId] = useState(null);
 
   const setNativeProps = (itemId: string, props: Record<string, unknown>) => {
     lynx
@@ -118,11 +119,15 @@ export function App(props: {
         'Content-Type': 'application/json',
         'x-api-key': import.meta.env.PUBLIC_X_API_KEY as string
       },
-      body: JSON.stringify({ "prompt": prompt, "sessionId": "session1" })
+      body: sessionId === null ? JSON.stringify({prompt}) : JSON.stringify({ prompt: prompt, sessionId:  sessionId })
     })
       .then(res => res.json())
       .then(json => {
         setChatList(prev => [...prev, json['response']]);
+        if (sessionId == null && json['sessionId']) {
+          setSessionId(json['sessionId']);
+          console.log("New sessionId:", json['sessionId']);
+        }
         console.log("Response data:", json);
       })
       .catch(err => {
@@ -173,6 +178,10 @@ export function App(props: {
           <view className="LoadingSpinner" style={{marginBottom:'40vh'}}>
             <image raw-text="Asking model..." />
           </view>
+        )}
+
+        {sessionId && (
+          <text className='SessionId'>Session ID: {sessionId}</text>
         )}
 
         <view
