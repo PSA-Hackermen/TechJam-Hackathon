@@ -16,6 +16,32 @@ declare module '@lynx-js/types' {
       rows?: number | string;
       bindinput?: (e: { type: 'input'; detail: { value: string } }) => void;
     };
+    'scroll-view'?: {
+      id?: string;
+      'scroll-orientation'?: string;
+      'scroll-bar-enable'?: boolean;
+      style?: React.CSSProperties;
+      bindcontentsizechanged?: (e: {
+        type: 'contentsizechanged';
+        detail: {
+          type: 'contentsizechanged';
+          scrollWidth: number;
+          scrollHeight: number;
+        };
+      }) => void;
+      bindscroll?: (e: {
+        type: 'scroll';
+        detail: {
+          type: 'scroll';
+          deltaX: number;
+          deltaY: number;
+          scrollLeft: number;
+          scrollTop: number;
+          scrollHeight: number;
+          scrollWidth: number;
+        };
+      }) => void;
+    };
   }
 }
 
@@ -24,6 +50,12 @@ declare global {
   interface LynxSelectorQuery {
     select(selector: string): LynxSelectorQuery;
     setNativeProps(props: Record<string, unknown>): LynxSelectorQuery;
+    invoke(options: {
+      method: string;
+      params?: Record<string, any>;
+      success?: (res: any) => void;
+      fail?: (res: any) => void;
+    }): LynxSelectorQuery;
     exec(): void;
   }
 
