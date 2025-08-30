@@ -13,6 +13,7 @@ export function App(props: {
   const [data, setData] = useState(null);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [chatList, setChatList] = useState<string[]>([]);
+  const [callingAPI, setCallingAPI] = useState(false);
 
 
   const setNativeProps = (itemId: string, props: Record<string, unknown>) => {
@@ -110,6 +111,7 @@ export function App(props: {
 
     const url = `https://wwkzwpjl19.execute-api.us-east-1.amazonaws.com/v1/infer`;
 
+    setCallingAPI(true);
     fetch(url, {
       method: 'POST',
       headers: {
@@ -125,6 +127,9 @@ export function App(props: {
       })
       .catch(err => {
         console.error("Error fetching data:", err);
+      })
+      .finally(() => {
+        setCallingAPI(false);
       });
   }
 
@@ -163,6 +168,12 @@ export function App(props: {
             )}
           </scroll-view>
         </view>
+
+        {callingAPI && (
+          <view className="LoadingSpinner">
+            <image raw-text="Asking model..." />
+          </view>
+        )}
 
         <view
           id="textareaPanel"
