@@ -1,12 +1,14 @@
-import { useEffect, useState } from '@lynx-js/react'
-import { ChatList, InputPanel } from './components/index.js'
-import { useChat, useKeyboard } from './hooks/index.js'
+import { useCallback, useEffect, useState, useLynxGlobalEventListener } from '@lynx-js/react'
 
 import './App.css'
+import arrow from './assets/arrow.png'
+import lynxLogo from './assets/lynx-logo.png'
+import reactLynxLogo from './assets/react-logo.png'
 
 export function App(props: {
   onRender?: () => void
 }) {
+  const [alterLogo, setAlterLogo] = useState(false)
   const [prompt, setPrompt] = useState('');
   const [data, setData] = useState(null);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -86,13 +88,14 @@ export function App(props: {
   useEffect(() => {
     console.info('Hello, ReactLynx')
   }, [])
-  
   props.onRender?.()
 
-  const handleSend = () => {
-    if (prompt.trim()) {
-      sendPrompt(prompt);
-      setPrompt('');
+  // Auto-scroll when chatList updates
+  useEffect(() => {
+    if (chatList.length > 0) {
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
     }
   }, [chatList, scrollToBottom]);
 
@@ -135,12 +138,10 @@ export function App(props: {
       });
   }
 
-  const handleContentSizeChanged = (e: any) => {
-    console.log('Content size changed:', e.detail);
-  }
 
   return (
     <view>
+      {/* <view className='Background' /> */}
       <view className='App'>
         {/* <view className='Banner'>
           <view className='Logo' bindtap={onTap}>
@@ -177,6 +178,10 @@ export function App(props: {
           <view className="LoadingSpinner" style={{marginBottom:'40vh'}}>
             <image raw-text="Asking model..." />
           </view>
+        )}
+
+        {sessionId && (
+          <text className='SessionId'>Session ID: {sessionId}</text>
         )}
 
         <view
