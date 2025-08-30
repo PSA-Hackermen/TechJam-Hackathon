@@ -7,7 +7,8 @@ import './App.css'
 export function App(props: {
   onRender?: () => void
 }) {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState<string>("");
+  const [key, setKey] = useState(0);
   const { chatList, sendPrompt, callingAPI, sessionId } = useChat();
   const { keyboardVisible, setNativeProps } = useKeyboard();
 
@@ -38,9 +39,13 @@ export function App(props: {
           sessionId={sessionId}
         />
         <InputPanel
+          key={key}
           prompt={prompt}
           onPromptChange={setPrompt}
-          onSend={handleSend}
+          onSend={() => {
+            handleSend();
+            setKey((k) => k + 1);
+          }}
         />
       </view>
     </view>
