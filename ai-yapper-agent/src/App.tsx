@@ -11,7 +11,7 @@ if (typeof window !== 'undefined') {
   if (typeof (window as any).lynx === 'undefined') {
     (window as any).lynx = {};
   }
-  
+
   // Ensure lynx object has safe fallbacks for all methods
   const lynxSafety = (window as any).lynx;
   if (!lynxSafety.switchKeyBoardDetect) {
@@ -19,7 +19,7 @@ if (typeof window !== 'undefined') {
       console.log('switchKeyBoardDetect called with:', enabled, '(fallback implementation)');
     };
   }
-  
+
   if (!lynxSafety.createSelectorQuery) {
     lynxSafety.createSelectorQuery = () => ({
       select: () => ({
@@ -37,8 +37,8 @@ export function App(props: {
   onRender?: () => void
 }) {
   const [prompt, setPrompt] = useState('');
-  const [data, setData] = useState<object | string | null>(null);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [chatList, setChatList] = useState<string[]>([]);
 
   const setNativeProps = (itemId: string, props: Record<string, unknown>) => {
     // Check if lynx global object is available
@@ -137,55 +137,56 @@ export function App(props: {
   }, [])
   props.onRender?.()
 
-  
+
 
   const sendPrompt = (prompt: string) => {
     console.log("Sending prompt:", prompt);
 
-    const url = `https://wwkzwpjl19.execute-api.us-east-1.amazonaws.com/v1/infer`;
+    // const url = `https://wwkzwpjl19.execute-api.us-east-1.amazonaws.com/v1/infer`;
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': import.meta.env.PUBLIC_X_API_KEY as string
-      },
-      body: JSON.stringify({ "prompt": prompt, "sessionId": "session1" })
-    })
-      .then(res => res.json())
-      .then(json => {
-        setData(json['response']);
-        console.log("Response data:", json);
-      })
-      .catch(err => {
-        setData("Error encountered: " + err.toString());
-        console.error("Error fetching data:", err);
-      });
-    
+    // fetch(url, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'x-api-key': import.meta.env.PUBLIC_X_API_KEY as string
+    //   },
+    //   body: JSON.stringify({ "prompt": prompt, "sessionId": "session1" })
+    // })
+    //   .then(res => res.json())
+    //   .then(json => {
+    //     setData(json['response']);
+    //     console.log("Response data:", json);
+    //   })
+    //   .catch(err => {
+    //     setData("Error encountered: " + err.toString());
+    //     console.error("Error fetching data:", err);
+    //   });
+
+    const fakeResponse = "This is a fake response";
+
+    setChatList(prev => [...prev, prompt, fakeResponse]);
+
+
   }
 
   return (
     <view>
-      {/* <view className='Background' /> */}
       <view className='App'>
-        {/* <view className='Banner'>
-          <view className='Logo' bindtap={onTap}>
-            {alterLogo
-              ? <image src={reactLynxLogo} className='Logo--react' />
-              : <image src={lynxLogo} className='Logo--lynx' />}
-          </view>
-          </view> */}
+
         <view className='Content'>
-          <text className='Subtitle'>What can I help with?</text>
-          <image src={arrow} className='Arrow' />
-          <text className='Title'>Current prompt is {prompt}</text>
-          {/* <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            bindinput={(e) => setUsername(e.detail.value)}
-          /> */}
-          {data && <text className='Description'>{JSON.stringify(data)}</text>}
+          {chatList.length <= 0 && <text className='Subtitle'>What can I help with?</text>}
+
+            {chatList && (
+              chatList.map((msg, idx) => (
+                idx % 2 === 1 ? (
+                  // left side
+                  <text key={idx} className="ChatMessage" style={{ padding: '10px', fontSize: '18px', alignSelf: 'flex-start' }}>{msg}</text>
+                ) : (
+                  // right side
+                  <text key={idx} className="ChatMessage" style={{ background: 'rgb(49, 49, 49)', padding: '10px 14px', fontSize: '18px', alignSelf: 'flex-end', borderRadius: "20px" }}>{msg}</text>
+                )
+              ))
+            )}
           {/* <text className='Description'>Tap the logo and have fun!</text>
           <text className='Hint'>
             Edit<text
@@ -212,9 +213,8 @@ export function App(props: {
             <view
               className='SendButton'
               bindtap={() => {
-                // You can add additional logic here if needed
                 sendPrompt(prompt);
-                setPrompt(''); // This will trigger any side effects
+                setPrompt('');
               }}
             >
               <text>→</text>
