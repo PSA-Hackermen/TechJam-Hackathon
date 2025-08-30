@@ -20,7 +20,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         <textarea
           placeholder='Ask anything'
           value={prompt}
-          bindinput={(e) => onPromptChange(e.detail.value)}
+          bindinput={(e: { detail: { value: string } }) => onPromptChange(e.detail.value)}
         />
         <view
           className='SendButton'
