@@ -26,7 +26,6 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 15px;
 }
 
 text {
@@ -92,19 +91,23 @@ text {
   justify-content: center;
   flex: 1;
   width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  /* padding: 20px; */
+  /* background-color: #764ba2; */
+  padding: 20px;
   overflow-y: scroll;
-  /* background-color: #d0690f;
-  border: 1px solid red; */
+  /* padding-top: 100px; */
 }
 
 .TextareaPanel {
   width: 100%;
   /* max-width: 500px; */
-  /* padding: 10px; */
+  padding: 10px;
   box-sizing: border-box;
+  /* position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto; */
+  display: flex;
 }
 
 /* .Arrow {
@@ -118,9 +121,9 @@ text {
 } */
 
 .Subtitle {
-  font-size: 1.8rem;
+  font-size: 30px;
   font-weight: 600;
-  margin-top: 30vh;
+  margin-top: 40vh;
 }
 
 /*
@@ -161,7 +164,7 @@ textarea {
   min-height: 45px;
   max-height: 100px;
   box-sizing: border-box;
-  background: rgb(49, 49, 49);
+  background: rgb(37, 37, 37);
 }
 
 textarea::placeholder {
@@ -174,7 +177,7 @@ textarea::placeholder {
   align-items: flex-end;
   gap: 10px;
   width: 100%;
-  /* background-color: #64a24b; */
+  /* background: rgba(156, 2, 2, 0.995); */
 }
 
 .InputContainer textarea {
