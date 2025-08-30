@@ -170,7 +170,7 @@ export function App(props: {
         </view>
 
         {callingAPI && (
-          <view className="LoadingSpinner">
+          <view className="LoadingSpinner" style={{marginBottom:'40vh'}}>
             <image raw-text="Asking model..." />
           </view>
         )}
