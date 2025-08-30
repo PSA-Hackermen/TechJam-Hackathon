@@ -1,0 +1,24 @@
+{
+  "name": "lynx-bundle-server",
+  "version": "1.0.0",
+  "description": "Server to serve lynx bundle files over HTTP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "lynx",
+    "bundle",
+    "server",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
