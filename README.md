@@ -8,6 +8,8 @@ The development tools that we used to build this project are:
 - VSCode
 - Github
 - Amazon Bedrock (API)
+- ArgoCD
+- Kubernetes
 
 
 Libraries used:
@@ -27,6 +29,7 @@ Now, run the following commands in sequence to set up and run the project:
 3. `npm run dev` will run the project and show a QR code in the CLI which you can scan with Lynx Go, an application that you need to install from your mobile app store.
 
 
+For the AWS bedrock API call, you will need to configure and setup your AWS Bedrock and update the API endpoint in `./ai-yapper-agent/src/hooks/useChat.ts`. Also, do add in your X_API_KEY that will be part of your fetch request in your `./ai-yapper-agent/.env` file under `PUBLIC_X_API_KEY`.
 
 
 ## Features
